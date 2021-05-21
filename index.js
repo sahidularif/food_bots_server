@@ -1,22 +1,20 @@
-const express = require('express')
+
+const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const fs = require('fs-extra');
+require('dotenv').config();
 const app = express();
+
 const port1 = 3500
 const port2 = 4000
-const fs = require('fs-extra');
-const dataPath = require("./data.json");
 
-// READ
-app.get('/user', (req, res) => {
-  fs.readFile(dataPath, 'utf8', (err, data) => {
-    if (err) {
-      throw err;
-    }
 
-    res.send(JSON.parse(data));
-  });
-});
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+const routes = require('./routes/routes.js')(app, fs);
 
 // Root:
 app.get('/', (req, res) => {
